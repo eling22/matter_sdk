@@ -26,7 +26,7 @@ jobs:
       - name: Checkout repository and submodules
         uses: actions/checkout@v3
         with:
-          submodules: 
+          submodules: true
           
       - name: Checkout submodules
         run: scripts/checkout_submodules.py --shallow --platform linux
