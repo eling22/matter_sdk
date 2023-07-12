@@ -1,7 +1,7 @@
 name: Build example - Linux Standalone
 
 on:
-    push:
+    # push:
     pull_request:
 
 concurrency:
