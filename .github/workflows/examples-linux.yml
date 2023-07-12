@@ -32,13 +32,10 @@ jobs:
           with:
             submodules: true
 
-      - name: Checkout submodules
-        run: scripts/checkout_submodules.py --shallow --platform linux
-
-      # - name: Checkout submodules & Bootstrap
-      #   uses: ./.github/actions/checkout-submodules-and-bootstrap
-      #   with:
-      #     platform: linux
+      - name: Checkout submodules & Bootstrap
+        uses: ./.github/actions/checkout-submodules-and-bootstrap
+        with:
+          platform: linux
         
       # - name: Building project
       #   run: ./scripts/examples/gn_rt582_example.sh ./examples/lighting-app/rt582 ./out/lighting-app RT582
