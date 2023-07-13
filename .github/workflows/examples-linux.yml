@@ -46,8 +46,8 @@ jobs:
             - name: Uploading lighting-app
               uses: actions/upload-artifact@v3
               with:
-                name: lighting-app_folder
-                path: ./out/lighting-app
+                name: lighting-app_bin
+                path: ./out/lighting-app/chip-rt582-lighting-app-example.bin
 
             - name: Build light-switch-app
               run: ./scripts/examples/gn_rt582_example.sh ./examples/light-switch-app/rt582 ./out/light-switch-app RT582
@@ -55,8 +55,8 @@ jobs:
             - name: Uploading light-switch-app
               uses: actions/upload-artifact@v3
               with:
-                name: light-switch-app_folder
-                path: ./out/light-switch-app
+                name: light-switch-app_bin
+                path: ./out/light-switch-app/chip-rt582-light-switch-app-example.bin
 
             - name: Clean out build output
               run: rm -rf ./out
