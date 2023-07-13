@@ -28,7 +28,39 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v3
+
             - name: Checkout submodules & Bootstrap
               uses: ./.github/actions/checkout-submodules-and-bootstrap
               with:
                 platform: linux
+
+            - name: Set up environment for size reports
+              uses: ./.github/actions/setup-size-reports
+              if: ${{ !env.ACT }}
+              with:
+                gh-context: ${{ toJson(github) }}
+
+            - name: Build Standalone cert tool
+              run: |
+                  ./scripts/run_in_build_env.sh \
+                     "./scripts/build/build_examples.py \
+                        --target linux-x64-chip-cert \
+                        build"
+
+            - name: Build minmdns example with platform dns
+              run: |
+                  ./scripts/run_in_build_env.sh \
+                     "./scripts/build/build_examples.py \
+                        --target linux-x64-address-resolve-tool-platform-mdns-ipv6only \
+                        build"
+                        
+            - name: Build example Standalone chip tool
+              run: |
+                  ./scripts/run_in_build_env.sh \
+                     "./scripts/build/build_examples.py \
+                        --target linux-x64-chip-tool \
+                        build"
+                  .environment/pigweed-venv/bin/python3 scripts/tools/memory/gh_sizes.py \
+                    linux debug chip-tool \
+                    out/linux-x64-chip-tool/chip-tool \
+                    /tmp/bloat_reports/
