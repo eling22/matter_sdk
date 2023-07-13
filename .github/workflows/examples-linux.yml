@@ -40,27 +40,29 @@ jobs:
               with:
                 gh-context: ${{ toJson(github) }}
 
-            - name: Build Standalone cert tool
-              run: |
-                  ./scripts/run_in_build_env.sh \
-                     "./scripts/build/build_examples.py \
-                        --target linux-x64-chip-cert \
-                        build"
+            - name: Build lighting-app
+              run: ./scripts/examples/gn_rt582_example.sh ./examples/lighting-app/rt582 ./out/lighting-app RT582
 
-            - name: Build minmdns example with platform dns
-              run: |
-                  ./scripts/run_in_build_env.sh \
-                     "./scripts/build/build_examples.py \
-                        --target linux-x64-address-resolve-tool-platform-mdns-ipv6only \
-                        build"
-                        
-            - name: Build example Standalone chip tool
-              run: |
-                  ./scripts/run_in_build_env.sh \
-                     "./scripts/build/build_examples.py \
-                        --target linux-x64-chip-tool \
-                        build"
-                  .environment/pigweed-venv/bin/python3 scripts/tools/memory/gh_sizes.py \
-                    linux debug chip-tool \
-                    out/linux-x64-chip-tool/chip-tool \
-                    /tmp/bloat_reports/
+            - name: Uploading lighting-app
+              uses: actions/upload-artifact@v3
+              with:
+                name: lighting-app_folder
+                path: ./out/lighting-app
+
+            - name: Build light-switch-app
+              run: ./scripts/examples/gn_rt582_example.sh ./examples/light-switch-app/rt582 ./out/light-switch-app RT582
+
+            - name: Uploading light-switch-app
+              uses: actions/upload-artifact@v3
+              with:
+                name: light-switch-app_folder
+                path: ./out/light-switch-app
+
+            - name: Clean out build output
+              run: rm -rf ./out
+
+            - name: Uploading Size Reports
+              uses: ./.github/actions/upload-size-reports
+              if: ${{ !env.ACT }}
+              with:
+                platform-name: Linux-Standalone
