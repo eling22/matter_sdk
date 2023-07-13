@@ -47,7 +47,14 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                 name: lighting-app_bin
-                path: ./out/lighting-app/chip-rt582-lighting-app-example.bin
+                path: ./out/lighting-app/RT582/chip-rt582-lighting-app-example.bin
+
+            - name: Report lighting-app size
+              run: |
+                  .environment/pigweed-venv/bin/python3 scripts/tools/memory/gh_sizes.py \
+                    linux debug lighting-app \
+                    out/lighting-app/RT582/chip-rt582-lighting-app-example \
+                    /tmp/bloat_reports/
 
             - name: Build light-switch-app
               run: ./scripts/examples/gn_rt582_example.sh ./examples/light-switch-app/rt582 ./out/light-switch-app RT582
@@ -56,7 +63,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                 name: light-switch-app_bin
-                path: ./out/light-switch-app/chip-rt582-light-switch-app-example.bin
+                path: ./out/light-switch-app/RT582/chip-rt582-light-switch-app-example.bin
 
             - name: Clean out build output
               run: rm -rf ./out
