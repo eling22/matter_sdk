@@ -14,22 +14,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 import argparse
+from collections import namedtuple
 import configparser
 import logging
-import os
 import subprocess
-from collections import namedtuple
+import os
 
 CHIP_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 ALL_PLATFORMS = set([
     'ameba',
     'android',
-    'asr',
     'bl602',
     'bouffalolab',
-    'cc13xx_26xx',
+    'cc13x2_26x2',
     'cc32xx',
     'darwin',
     'efr32',
@@ -46,7 +46,6 @@ ALL_PLATFORMS = set([
     'mw320',
     'genio',
     'openiotsdk',
-    'silabs_docker',
 ])
 
 Module = namedtuple('Module', 'name path platforms')
@@ -61,39 +60,28 @@ def load_module_info() -> None:
             platforms = module.get('platforms', '').split(',')
             platforms = set(filter(None, platforms))
             assert not (platforms - ALL_PLATFORMS), "Submodule's platform not contained in ALL_PLATFORMS"
-            name = name.replace('submodule "', '').replace('"', '')
             yield Module(name=name, path=module['path'], platforms=platforms)
 
 
 def module_matches_platforms(module: Module, platforms: set) -> bool:
-    # If the module is not associated with any specific platform, treat it as a match.
-    if not module.platforms:
+    # If no platforms have been selected, or the module is not associated with any specific
+    # platforms, treat it as a match.
+    if not platforms or not module.platforms:
         return True
     return bool(platforms & module.platforms)
 
 
-def module_initialized(module: Module) -> bool:
-    return bool(os.listdir(os.path.join(CHIP_ROOT, module.path)))
-
-
 def make_chip_root_safe_directory() -> None:
-    # Can't use check_output, git will exit(1) if the setting has no existing value
-    config = subprocess.run(['git', 'config', '--global', '--null', '--get-all',
-                            'safe.directory'], stdout=subprocess.PIPE, text=True)
-    existing = []
-    if config.returncode != 1:
-        config.check_returncode()
-        existing = config.stdout.split('\0')
-    if CHIP_ROOT not in existing:
-        logging.info("Adding CHIP_ROOT to global git safe.directory configuration")
-        subprocess.check_call(['git', 'config', '--global', '--add', 'safe.directory', CHIP_ROOT])
+    # ensure no errors regarding ownership in the directory. Newer GIT seems to require this:
+    subprocess.check_call(['git', 'config', '--global', '--add', 'safe.directory', CHIP_ROOT])
 
 
 def checkout_modules(modules: list, shallow: bool, force: bool, recursive: bool) -> None:
-    names = ', '.join([module.name for module in modules])
+    names = [module.name.replace('submodule "', '').replace('"', '') for module in modules]
+    names = ', '.join(names)
     logging.info(f'Checking out: {names}')
 
-    cmd = ['git', '-C', CHIP_ROOT, 'submodule', '--quiet', 'update', '--init']
+    cmd = ['git', '-C', CHIP_ROOT, 'submodule', 'update', '--init']
     cmd += ['--depth', '1'] if shallow else []
     cmd += ['--force'] if force else []
     cmd += ['--recursive'] if recursive else []
@@ -103,10 +91,11 @@ def checkout_modules(modules: list, shallow: bool, force: bool, recursive: bool)
 
 
 def deinit_modules(modules: list, force: bool) -> None:
-    names = ', '.join([module.name for module in modules])
+    names = [module.name.replace('submodule "', '').replace('"', '') for module in modules]
+    names = ', '.join(names)
     logging.info(f'Deinitializing: {names}')
 
-    cmd = ['git', '-C', CHIP_ROOT, 'submodule', '--quiet', 'deinit']
+    cmd = ['git', '-C', CHIP_ROOT, 'submodule', 'deinit']
     cmd += ['--force'] if force else []
     cmd += [module.path for module in modules]
 
@@ -117,8 +106,6 @@ def main():
     logging.basicConfig(format='%(message)s', level=logging.INFO)
 
     parser = argparse.ArgumentParser(description='Checkout or update relevant git submodules')
-    parser.add_argument('--allow-changing-global-git-config', action='store_true',
-                        help='Allow global git options to be modified if necessary, e.g. safe.directory')
     parser.add_argument('--shallow', action='store_true', help='Fetch submodules without history')
     parser.add_argument('--platform', nargs='+', choices=ALL_PLATFORMS, default=[],
                         help='Process submodules for specific platforms only')
@@ -131,14 +118,12 @@ def main():
     modules = list(load_module_info())
     selected_platforms = set(args.platform)
     selected_modules = [m for m in modules if module_matches_platforms(m, selected_platforms)]
-    unmatched_modules = [m for m in modules if not module_matches_platforms(
-        m, selected_platforms) and module_initialized(m)]
+    unmatched_modules = [m for m in modules if not module_matches_platforms(m, selected_platforms)]
 
-    if args.allow_changing_global_git_config:
-        make_chip_root_safe_directory()  # ignore directory ownership issues for sub-modules
+    make_chip_root_safe_directory()
     checkout_modules(selected_modules, args.shallow, args.force, args.recursive)
 
-    if args.deinit_unmatched and unmatched_modules:
+    if args.deinit_unmatched:
         deinit_modules(unmatched_modules, args.force)
 
 
