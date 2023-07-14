@@ -53,7 +53,7 @@ jobs:
               run: |
                   .environment/pigweed-venv/bin/python3 scripts/tools/memory/gh_sizes.py \
                     linux debug lighting-app \
-                    out/lighting-app/RT582/chip-rt582-lighting-app-example \
+                    out/lighting-app/RT582/chip-rt582-lighting-app-example.bin \
                     /tmp/bloat_reports/
 
             - name: Build light-switch-app
