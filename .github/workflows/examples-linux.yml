@@ -63,7 +63,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                 name: light-switch-app_bin
-                path: ./out/light-switch-app/RT582/chip-rt582-light-switch-app-example.bin
+                path: ./out/lighting-app/RT582/chip-rt582-lighting-app-example.out
 
             - name: Clean out build output
               run: rm -rf ./out
