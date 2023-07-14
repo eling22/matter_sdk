@@ -53,7 +53,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                 name: lighting-app_size
-                path: ./out/lighting-app/RT582/chip-rt582-lighting-app-example/size.txt
+                path: ./out/lighting-app/RT582/size.txt
 
             - name: Build light-switch-app
               run: ./scripts/examples/gn_rt582_example.sh ./examples/light-switch-app/rt582 ./out/light-switch-app RT582
