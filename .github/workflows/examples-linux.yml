@@ -14,7 +14,7 @@ env:
     CHIP_NO_LOG_TIMESTAMPS: true
     
 jobs:
-    linux_standalone:
+    build-linux:
         name: Linux Standalone
 
         runs-on: ubuntu-latest
@@ -49,11 +49,8 @@ jobs:
                 name: lighting-app_bin
                 path: ./out/lighting-app/RT582/chip-rt582-lighting-app-example.bin
 
-            - name: Uploading lighting-app size
-              uses: actions/upload-artifact@v3
-              with:
-                name: lighting-app_size
-                path: ./out/lighting-app/RT582/size.txt
+            - name: Saving lighting-app size file
+              uses: cp ./out/lighting-app/RT582/size.txt ${{ !env.ACT }}/chip-rt582-lighting-app-example-size.txt
 
             - name: Build light-switch-app
               run: ./scripts/examples/gn_rt582_example.sh ./examples/light-switch-app/rt582 ./out/light-switch-app RT582
@@ -62,7 +59,10 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                 name: light-switch-app_bin
-                path: ./out/lighting-app/RT582/chip-rt582-lighting-app-example.out
+                path: ./out/light-switch-app/RT582/chip-rt582-light-switch-app-example.bin
+
+            - name: Saving light-switch-app size file
+              uses: cp ./out/light-switch-app/RT582/size.txt ${{ !env.ACT }}/chip-rt582-light-switch-app-example-size.txt
 
             - name: Clean out build output
               run: rm -rf ./out
@@ -71,4 +71,4 @@ jobs:
               uses: ./.github/actions/upload-size-reports
               if: ${{ !env.ACT }}
               with:
-                platform-name: Linux-Standalone
+                platform-name: Linux
