@@ -97,8 +97,8 @@ jobs:
 
           - name: Downloading bin files
             uses: actions/download-artifact@v3
-              with:
-                name: bin_folder
+            with:
+              name: bin_folder
 
           - name: Do Some Thing
             run: ls
