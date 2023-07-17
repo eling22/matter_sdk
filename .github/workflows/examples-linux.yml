@@ -98,11 +98,10 @@ jobs:
           - name: Downloading bin files
             uses: actions/download-artifact@master
               with:
+                name: bin_folder
                 path: $BIN_FOLDER
 
           - name: Do Some Thing
-            run: |
-              cd $BIN_FOLDER
-              ls
+            run: ls
 
         
