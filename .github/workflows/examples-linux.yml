@@ -50,7 +50,7 @@ jobs:
                 gh-context: ${{ toJson(github) }}
 
             - name: Set up bin file folder
-              run : mkdir -r $BIN_FOLDER
+              run : mkdir -p $BIN_FOLDER
 
             - name: Build lighting-app
               run: ./scripts/examples/gn_rt582_example.sh ./examples/lighting-app/rt582 ./out/lighting-app RT582
