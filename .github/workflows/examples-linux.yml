@@ -82,6 +82,9 @@ jobs:
                 name: bin_files
                 path: $BIN_FOLDER
 
+            - name: Do Some Thing
+              run: ls
+
             - name: Uploading Size Files
               uses: actions/upload-artifact@v3
               with:
@@ -106,7 +109,7 @@ jobs:
           - name: Downloading bin files
             uses: actions/download-artifact@v3
             with:
-              name: bin_folder
+              name: bin_files
 
           - name: Do Some Thing
             run: ls
