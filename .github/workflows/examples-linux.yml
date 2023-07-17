@@ -3,8 +3,15 @@
 name: Build example - Linux 
 
 on:
-    pull_request:
-    merge_group:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  merge_group:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 concurrency:
     group: ${{ github.ref }}-${{ github.workflow }}-${{ (github.event_name == 'pull_request' && github.event.number) || (github.event_name == 'workflow_dispatch' && github.run_number) || github.sha }}
@@ -12,10 +19,12 @@ concurrency:
 
 env:
     CHIP_NO_LOG_TIMESTAMPS: true
+    SIZE_FOLDER: /tmp/bloat_reports
+    BIN_FOLDER: /tmp/bin_folders
     
 jobs:
     build-linux:
-        name: Linux Standalone
+        name: Build-Linux
 
         runs-on: ubuntu-latest
         if: github.actor != 'restyled-io[bot]'
@@ -26,7 +35,7 @@ jobs:
                 - "/tmp/bloat_reports:/tmp/bloat_reports"
 
         steps:
-            - name: Checkout
+            - name: Checkout repository
               uses: actions/checkout@v3
 
             - name: Checkout submodules & Bootstrap
@@ -40,35 +49,60 @@ jobs:
               with:
                 gh-context: ${{ toJson(github) }}
 
+            - name: Set up bin file folder
+              run : mkdir $BIN_FOLDER
+
             - name: Build lighting-app
               run: ./scripts/examples/gn_rt582_example.sh ./examples/lighting-app/rt582 ./out/lighting-app RT582
 
-            - name: Uploading lighting-app
-              uses: actions/upload-artifact@v3
-              with:
-                name: lighting-app_bin
-                path: ./out/lighting-app/RT582/chip-rt582-lighting-app-example.bin
-
-            - name: Saving lighting-app size file
-              run: cp ./out/lighting-app/RT582/size.txt ${{ !env.ACT }}/chip-rt582-lighting-app-example-size.txt
+            - name: Saving lighting-app files
+              run :  |
+                cp ./out/lighting-app/RT582/chip-rt582-lighting-app-example.bin $BIN_FOLDER/chip-rt582-lighting-app-example.bin
+                cp ./out/lighting-app/RT582/size.txt $SIZE_FOLDER/chip-rt582-lighting-app-example-size.txt
 
             - name: Build light-switch-app
               run: ./scripts/examples/gn_rt582_example.sh ./examples/light-switch-app/rt582 ./out/light-switch-app RT582
 
-            - name: Uploading light-switch-app
-              uses: actions/upload-artifact@v3
-              with:
-                name: light-switch-app_bin
-                path: ./out/light-switch-app/RT582/chip-rt582-light-switch-app-example.bin
+            - name: Saving light-switch-app files
+              run :  |
+                cp ./out/light-switch-app/RT582/chip-rt582-light-switch-app-example.bin $BIN_FOLDER/chip-rt582-light-switch-app-example.bin
+                cp ./out/light-switch-app/RT582/size.txt $SIZE_FOLDER/chip-rt582-light-switch-app-example-size.txt
 
             - name: Saving light-switch-app size file
-              run: cp ./out/light-switch-app/RT582/size.txt ${{ !env.ACT }}/chip-rt582-light-switch-app-example-size.txt
+              run: cp ./out/light-switch-app/RT582/size.txt $SIZE_FOLDER/chip-rt582-light-switch-app-example-size.txt
 
             - name: Clean out build output
               run: rm -rf ./out
+
+            - name: Uploading Bin Files
+              uses: actions/upload-artifact@v3
+              with:
+                name: lighting-app_bin
+                path: $BIN_FOLDER
 
             - name: Uploading Size Reports
               uses: ./.github/actions/upload-size-reports
               if: ${{ !env.ACT }}
               with:
                 platform-name: Linux
+
+    run-on-board:
+        name: Run-On-Board
+        needs: build-linux
+        runs-on: self-host
+
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v3
+
+          - name: Downloading bin files
+            uses: actions/download-artifact@master
+              with:
+                path: $BIN_FOLDER
+
+          - name: Do Some Thing
+            run: |
+              cd $BIN_FOLDER
+              ls
+
+        
