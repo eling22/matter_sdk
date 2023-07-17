@@ -19,8 +19,8 @@ concurrency:
 
 env:
     CHIP_NO_LOG_TIMESTAMPS: true
-    SIZE_FOLDER: /tmp/bloat_reports
-    BIN_FOLDER: /tmp/bin_folders
+    SIZE_FOLDER: tmp/bloat_reports
+    BIN_FOLDER: tmp/bin_folders
     
 jobs:
     build-linux:
@@ -89,7 +89,7 @@ jobs:
     run-on-board:
         name: Run-On-Board
         needs: build-linux
-        runs-on: self-host
+        runs-on: self-hosted
 
         steps:
           - name: Checkout repository
