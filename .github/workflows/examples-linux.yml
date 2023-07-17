@@ -50,7 +50,9 @@ jobs:
                 gh-context: ${{ toJson(github) }}
 
             - name: Set up bin file folder
-              run : mkdir -p $BIN_FOLDER
+              run : |
+                mkdir -p $BIN_FOLDER
+                mkdir -p $SIZE_FOLDER
 
             - name: Build lighting-app
               run: ./scripts/examples/gn_rt582_example.sh ./examples/lighting-app/rt582 ./out/lighting-app RT582
@@ -77,8 +79,14 @@ jobs:
             - name: Uploading Bin Files
               uses: actions/upload-artifact@v3
               with:
-                name: lighting-app_bin
+                name: bin_files
                 path: $BIN_FOLDER
+
+            - name: Uploading Size Files
+              uses: actions/upload-artifact@v3
+              with:
+                name: size_files
+                path: $SIZE_FOLDER
 
             - name: Uploading Size Reports
               uses: ./.github/actions/upload-size-reports
