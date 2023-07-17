@@ -80,7 +80,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                 name: bin_files
-                path: $BIN_FOLDER/
+                path: ${{ env.BIN_FOLDER }}/
 
             - name: Do Some Thing
               run: ls
@@ -89,7 +89,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                 name: size_files
-                path: $SIZE_FOLDER/
+                path: ${{ env.SIZE_FOLDER }}/
 
             - name: Uploading Size Reports
               uses: ./.github/actions/upload-size-reports
