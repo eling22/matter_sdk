@@ -96,7 +96,7 @@ jobs:
             uses: actions/checkout@v3
 
           - name: Downloading bin files
-            uses: actions/download-artifact@master
+            uses: actions/download-artifact@v3
               with:
                 name: bin_folder
 
