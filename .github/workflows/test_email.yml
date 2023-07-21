@@ -38,6 +38,7 @@ jobs:
             uses: dawidd6/action-send-mail@v3
             with:
               server_address: eileen.lai@rafaelmicro.com
+              from: Eileen_A
               to: lai.eling22@gmail.com
               subject: 'test email'
               body: 'This is a notification from GitHub actions.'
@@ -46,6 +47,7 @@ jobs:
             uses: dawidd6/action-send-mail@v3
             with:
               server_address: lai.eling22@gmail.com
+              from: Eileen_B
               to: eileen.lai@rafaelmicro.com 
               subject: 'test email'
               body: 'This is a notification from GitHub actions.'
