@@ -27,9 +27,25 @@ jobs:
     test-email:
         runs-on: ubuntu-latest
         steps:
-          - name: Send email to Eileen
+          - name: Send email to Eileen by cinotify
             uses: cinotify/github-action@main
             with:
               to: 'lai.eling22@gmail.com'
+              subject: 'test email'
+              body: 'This is a notification from GitHub actions.'
+
+          - name: Send email to Eileen by dawidd6
+            uses: dawidd6/action-send-mail@v3
+            with:
+              server_address: eileen.lai@rafaelmicro.com
+              to: lai.eling22@gmail.com
+              subject: 'test email'
+              body: 'This is a notification from GitHub actions.'
+
+          - name: Send email to Eileen by dawidd6
+            uses: dawidd6/action-send-mail@v3
+            with:
+              server_address: lai.eling22@gmail.com
+              to: eileen.lai@rafaelmicro.com 
               subject: 'test email'
               body: 'This is a notification from GitHub actions.'
