@@ -25,6 +25,7 @@ env:
     
 jobs:
     test-email:
+        runs-on: ubuntu-latest
         steps:
           - name: Send email to Eileen
             uses: cinotify/github-action@main
