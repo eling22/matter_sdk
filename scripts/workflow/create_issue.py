@@ -6,7 +6,7 @@ import sys
 # Authentication for user filing issue (must have read/write access to
 # repository to add issue to)
 USERNAME = 'billkarma-bot'
-TOKEN = os.environ['GITHUB_TOKEN']
+# TOKEN = os.environ['GITHUB_TOKEN']
 
 # The repository to add this issue to
 REPO_OWNER = 'footbits'
