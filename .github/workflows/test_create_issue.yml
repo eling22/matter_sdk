@@ -32,7 +32,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
           - name: Create an issue
-            run: python shell/workflow/create_issue.py
+            run: python scripts/workflow/create_issue.py
 
           # - name: Create an issue
           #   uses: dacbd/create-issue-action@main
