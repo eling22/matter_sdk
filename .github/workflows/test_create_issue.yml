@@ -29,12 +29,15 @@ env:
     
 jobs:
     test-create_issue:
-        runs-on: self-hosted
+        runs-on: ubuntu-latest
         steps:
           - name: Create an issue
-            uses: dacbd/create-issue-action@main
-            with:
-              token: ${{ github.token }}
-              title: Simple test issue
-              body: my new issue
-              assignees: eling22
+            run: python create_issue.py
+
+          # - name: Create an issue
+          #   uses: dacbd/create-issue-action@main
+          #   with:
+          #     token: ${{ github.token }}
+          #     title: Simple test issue
+          #     body: my new issue
+          #     assignees: eling22

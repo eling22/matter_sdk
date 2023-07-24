@@ -65,6 +65,7 @@ jobs:
               run: rm -rf ./out
 
             - name: Uploading Files
+              if: ${{ always() }}
               uses: actions/upload-artifact@v3
               with:
                 name: bin_files_and_size_files
