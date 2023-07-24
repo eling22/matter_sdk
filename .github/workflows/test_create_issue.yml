@@ -32,8 +32,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
-              uses: actions/checkout@v3
-              
+            uses: actions/checkout@v3
+
           - name: Create an issue
             run: python3 scripts/workflow/create_issue.py
 
