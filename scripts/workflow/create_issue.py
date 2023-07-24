@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import sys
+import argparse
 
 # Authentication for user filing issue (must have read/write access to
 # repository to add issue to)
@@ -13,6 +14,15 @@ REPO_OWNER = 'footbits'
 REPO_NAME = 'billkarma-ios'
 
 print("os.environ :", os.environ)
+parser = argparse.ArgumentParser(description='Checkout or update relevant git submodules')
+parser.add_argument("token")
+parser.add_argument("owner")
+parser.add_argument("project_name")
+args = parser.parse_args()
+
+print(args.token)
+print(args.owner)
+print(args.project_name)
 
 # def make_github_issue(title, body=None, labels=None):
 #     '''Create an issue on github.com using the given parameters.'''
