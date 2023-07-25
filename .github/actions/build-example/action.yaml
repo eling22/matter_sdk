@@ -19,7 +19,9 @@ runs:
     
     - name: Copy bin file to upload project directory
       shell: bash
-      run : cp ./out/${{ inputs.example_name }}/RT582/chip-rt582-${{ inputs.example_name }}-example.bin ${{ inputs.upload_bin_path }}
+      run : | 
+      mkdir -p ${{ inputs.upload_bin_path }}/${{ inputs.example_name }}
+      cp ./out/${{ inputs.example_name }}/RT582 ${{ inputs.upload_bin_path }}/${{ inputs.example_name }}
     
     - name: Copy size file to upload project directory
       shell: bash
