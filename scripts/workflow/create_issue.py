@@ -27,7 +27,7 @@ print(args.project_name)
 def make_github_issue(title, body=None, labels=None):
     '''Create an issue on github.com using the given parameters.'''
     # Our url to create issues via POST
-    url = 'https://api.github.com/repos/%s/issues' % (REPO_NAME)
+    url = 'https://api.github.com/repos/%s/issues' % (args.project_name)
     # Create an authenticated session to create the issue
     headers = {'Authorization': "token %s" % args.token,
                "Accept": "application/vnd.github+json" }
