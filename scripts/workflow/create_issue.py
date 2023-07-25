@@ -2,6 +2,7 @@ import os
 import json
 import sys
 import argparse
+import requests
 
 # Authentication for user filing issue (must have read/write access to
 # repository to add issue to)
