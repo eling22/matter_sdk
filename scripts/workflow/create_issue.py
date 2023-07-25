@@ -23,24 +23,24 @@ print(args.token)
 print(args.owner)
 print(args.project_name)
 
-# def make_github_issue(title, body=None, labels=None):
-#     '''Create an issue on github.com using the given parameters.'''
-#     # Our url to create issues via POST
-#     url = 'https://api.github.com/repos/%s/%s/issues' % (REPO_OWNER, REPO_NAME)
-#     # Create an authenticated session to create the issue
-#     headers = {'Authorization': "token %s" % TOKEN,
-#                "Accept": "application/vnd.github+json" }
-#     # Create our issue
-#     issue = {'title': title,
-#              'body': body,
-#              'labels': labels,
-#              'assignees': 'eling22'}
-#     # Add the issue to our repository
-#     r = requests.request('POST', url, headers=headers, data=json.dumps(issue))
-#     if r.status_code == 201:
-#         print('Successfully created Issue "%s"' % title)
-#     else:
-#         print('Could not create Issue "%s"' % title)
-#         print('Response:', r.content)
+def make_github_issue(title, body=None, labels=None):
+    '''Create an issue on github.com using the given parameters.'''
+    # Our url to create issues via POST
+    url = 'https://api.github.com/repos/%s/%s/issues' % (REPO_OWNER, REPO_NAME)
+    # Create an authenticated session to create the issue
+    headers = {'Authorization': "token %s" % args.token,
+               "Accept": "application/vnd.github+json" }
+    # Create our issue
+    issue = {'title': title,
+             'body': body,
+             'labels': labels,
+             'assignees': 'eling22'}
+    # Add the issue to our repository
+    r = requests.request('POST', url, headers=headers, data=json.dumps(issue))
+    if r.status_code == 201:
+        print('Successfully created Issue "%s"' % title)
+    else:
+        print('Could not create Issue "%s"' % title)
+        print('Response:', r.content)
 
-# make_github_issue('Issue Title', 'Body text', ['bug'])
+make_github_issue('Issue Title', 'Body text', ['bug'])
