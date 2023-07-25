@@ -17,11 +17,13 @@ runs:
       shell: bash
       run : ./scripts/examples/gn_rt582_example.sh ./examples/${{ inputs.example_name }}/rt582 ./out/${{ inputs.example_name }} RT582
     
+    - name: Craete Folder
+      shell: bash
+      run : mkdir -p ${{ inputs.upload_bin_path }}/${{ inputs.example_name }}
+
     - name: Copy bin file to upload project directory
       shell: bash
-      run : | 
-      mkdir -p ${{ inputs.upload_bin_path }}/${{ inputs.example_name }}
-      cp ./out/${{ inputs.example_name }}/RT582 ${{ inputs.upload_bin_path }}/${{ inputs.example_name }}
+      run : cp ./out/${{ inputs.example_name }}/RT582 ${{ inputs.upload_bin_path }}/${{ inputs.example_name }}
     
     - name: Copy size file to upload project directory
       shell: bash
