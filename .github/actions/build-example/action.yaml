@@ -23,7 +23,7 @@ runs:
 
     - name: Copy bin file to upload project directory
       shell: bash
-      run : cp ./out/${{ inputs.example_name }}/RT582 ${{ inputs.upload_bin_path }}/${{ inputs.example_name }}
+      run : cp -r ./out/${{ inputs.example_name }}/RT582 ${{ inputs.upload_bin_path }}/${{ inputs.example_name }}
     
     - name: Copy size file to upload project directory
       shell: bash
