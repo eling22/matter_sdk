@@ -54,12 +54,12 @@ jobs:
                 upload_bin_path: $UPLOAD_FOLDER/$BIN_FOLDER
                 upload_size_path: $UPLOAD_FOLDER/$SIZE_FOLDER
 
-            # - name: Build light-switch-app example
-            #   uses: ./.github/actions/build-example
-            #   with:
-            #     example_name: light-switch-app
-            #     upload_bin_path: $UPLOAD_FOLDER/$BIN_FOLDER
-            #     upload_size_path: $UPLOAD_FOLDER/$SIZE_FOLDER
+            - name: Build light-switch-app example
+              uses: ./.github/actions/build-example
+              with:
+                example_name: light-switch-app
+                upload_bin_path: $UPLOAD_FOLDER/$BIN_FOLDER
+                upload_size_path: $UPLOAD_FOLDER/$SIZE_FOLDER
 
             - name: Clean out build output
               run: rm -rf ./out

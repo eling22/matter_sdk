@@ -34,8 +34,8 @@ jobs:
           - name: Checkout repository
             uses: actions/checkout@v3
 
-          - name: Create an issue
-            run: python3 scripts/workflow/create_issue.py "${{ github.token }}" "${{github.repository_owner}}" "${{github.repository}}"
+          # - name: Create an issue
+          #   run: python3 scripts/workflow/create_issue.py "${{ github.token }}" "${{github.repository_owner}}" "${{github.repository}}"
 
           # - name: Create an issue
           #   uses: dacbd/create-issue-action@main
