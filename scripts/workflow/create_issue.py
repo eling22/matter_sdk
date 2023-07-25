@@ -35,7 +35,7 @@ def make_github_issue(title, body=None, labels=None):
     issue = {'title': title,
              'body': body,
              'labels': labels,
-             'assignees': 'eling22'}
+             'assignees': '["eling22"]'}
     # Add the issue to our repository
     r = requests.request('POST', url, headers=headers, data=json.dumps(issue))
     if r.status_code == 201:
