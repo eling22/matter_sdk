@@ -71,21 +71,21 @@ jobs:
                 name: bin_files_and_size_files
                 path: ${{ env.UPLOAD_FOLDER }}/
 
-    run-on-board:
-        name: Run-On-Board
-        needs: build-linux
-        runs-on: self-hosted
+    # run-on-board:
+    #     name: Run-On-Board
+    #     needs: build-linux
+    #     runs-on: self-hosted
 
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v3
+    #     steps:
+    #       - name: Checkout repository
+    #         uses: actions/checkout@v3
 
-          - name: Downloading bin files
-            uses: actions/download-artifact@v3
-            with:
-              name: bin_files_and_size_files
+    #       - name: Downloading bin files
+    #         uses: actions/download-artifact@v3
+    #         with:
+    #           name: bin_files_and_size_files
 
-          - name: Do Some Thing
-            run: ls
+    #       - name: Do Some Thing
+    #         run: ls
 
         
